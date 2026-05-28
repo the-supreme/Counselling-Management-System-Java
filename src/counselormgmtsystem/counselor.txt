@@ -1,0 +1,3 @@
+# counselorId|username|password|fullName|specialization
+C001|alice|pass123|Alice Tan|Academic Stress
+C002|daniel|pass123|Daniel Lim|Career Guidance
