@@ -1,0 +1,5 @@
+# appointmentId|studentId|studentName|counselorId|date|time|bookingType|status|queueNumber
+A001|S001|Nur Aina|C001|2026-07-01|09:00|Online|Cancelled|Q001
+A002|S002|Jason Lee|C001|2026-07-01|10:30|Walk-in|Completed|Q002
+A003|S003|Priya Kumar|C002|2026-07-02|14:00|Online|Pending|Q003
+A004|S004|Muhammad Amir|C001|2026-07-03|11:00|Walk-in|Rescheduled|Q004
