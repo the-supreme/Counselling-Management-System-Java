@@ -1,0 +1,4 @@
+REC001|APT001|STD001|CNS001|2026-08-01|Student expressed immense stress managing their OOP assignment deadlines alongside club commitments.|Advised breaking down tasks into smaller modules. Scheduled a follow-up check-in next week.
+REC002|APT004|STD004|CNS001|2026-08-01|Student requested immediate support regarding minor panic attacks experienced during presentations.|Taught box-breathing coping mechanisms. Recommended visiting the campus clinic if symptoms intensify.
+REC003|APT999|STD002|CNS002|2026-07-25|Archived past record: discussed career choices and shifting majors from IT to Software Engineering.|Provided structural breakdown of elective variations. Student feels more confident.
+REC004|APT998|STD003|CNS003|2026-07-26|Archived past record: Student coping with family grief. Expressed trouble concentrating during lectures.|Extended academic empathy documentation draft to be processed via Faculty administration.

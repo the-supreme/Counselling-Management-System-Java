@@ -1,0 +1,11 @@
+ADM001|sarah_admin|admin123|Sarah Jenkins|Active
+ADM002|david_boss|mgmPass9|David Miller|Active
+CNS001|dr_anand|cnsPass1|Dr. Anand Raj|Active
+CNS002|clara_wong|cnsPass2|Clara Wong|Active
+CNS003|dr_lee|cnsPass3|Dr. Lee Wei|Active
+REC001|kumar_recep|recPass1|Kumar Subramaniam|Active
+REC002|amy_tan|recPass2|Amy Tan Swee Lin|Active
+STD001|alex_lee|stdPass1|Alex Lee Jia Earn|Active
+STD002|priya_sharma|stdPass2|Priya Sharma|Active
+STD003|ryan_tan|stdPass3|Ryan Tan Meng|Active
+STD004|meera_nair|stdPass4|Meera Nair|Active
