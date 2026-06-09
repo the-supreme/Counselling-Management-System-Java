@@ -1,0 +1,30 @@
+List of Classes
+
+Class User
+ID, username, password, fullName, status
+
+	Class Counselor extends User
+		specialization, contactNumber, email
+	Class Receptionist extends User
+		contactNumber, email
+		Method: generateQueueNumber()
+	Class Student extends User
+		intakeCode, contactNumber, emergencyContact
+	Class Admin extends User
+		contactNumber, email, officeRoom
+		generateReports(String type)
+		manageUserAccounts(userList, String action)
+
+Class Roster
+	rosterID, counselorID, date, startTime, endTime, status
+Class Appointment
+	appointmentID, studentID, counselorID, date, time, bookingType, queueNumber, status
+Class ConsultationRecord
+	recordID, appointmentID, studentID, counselorID, date, notes, recommendationsCouser
+
+Class FileHandler
+	ArrayList<User>, ArrayList<Appointment>, ArrayList<Roster>, ArrayList<ConsultationRecord>
+	Methods: loadDataFromFiles(), saveDataToFiles(), checkLogin(user, pass)
+
+
+
