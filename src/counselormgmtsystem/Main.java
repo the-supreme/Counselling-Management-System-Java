@@ -5,8 +5,8 @@ public class Main {
 
         // read the files and initialize
         FileHandler fh = new FileHandler();
-        fh.loadDataFromFiles("admin.txt");
-
+        fh.loadDataFromFiles();
+        
 
     }
 }

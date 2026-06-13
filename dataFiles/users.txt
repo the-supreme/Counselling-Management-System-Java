@@ -11,3 +11,4 @@ STD001|alex_lee|stdPass1|Alex Lee Jia Earn|Active
 STD002|priya_sharma|stdPass2|Priya Sharma|Active
 STD003|ryan_tan|stdPass3|Ryan Tan Meng|Active
 STD004|meera_nair|stdPass4|Meera Nair|Active
+ADM005|adam_abu|ad!@mAbuPass5|Adam Abu|Active

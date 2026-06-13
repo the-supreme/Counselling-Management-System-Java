@@ -1,7 +1,7 @@
 package counselormgmtsystem;
 
 //abstract because dont want to randomly create a user object
-protected abstract class User {
+abstract class User {
     protected String ID;
     protected String username;
     protected String password;
@@ -19,43 +19,43 @@ protected abstract class User {
     }
 
     // getter & setter
-    String getID(String ID) {
+    public String getID(String ID) {
         return ID;
     }
 
-    String setID(String ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
-    String getUsername(String username) {
+    public String getUsername(String username) {
         return username;
     }
 
-    String setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }    
     
-    String getPassword(String password) {
+    public String getPassword(String password) {
         return password;
     }
 
-    String setpassword(String password) {
+    public void setpassword(String password) {
         this.password = password;
     }    
     
-    String getfullName(String fullName) {
+    public String getfullName(String fullName) {
         return fullName;
     }
 
-    String setFullName(String fullName) {
+    public void setFullName(String fullName) {
         this.fullName = fullName;
     }    
     
-    String getStatus(String status) {
+    public String getStatus(String status) {
         return status;
     }
 
-    String setstatus(String status) {
+    public void setstatus(String status) {
         this.status = status;
     }    
     
