@@ -2,12 +2,14 @@ package counselormgmtsystem;
 
 public class Student extends User{
     String intakeCode;
+    String email;
     String contactNumber;
     String emergencyContact;
 
-    public Student(String ID, String username, String password, String fullName, String status, String intakeCode, String contactNumber, String emergencyContact) {
+    public Student(String ID, String username, String password, String fullName, String status, String intakeCode, String email, String contactNumber, String emergencyContact) {
         super(ID, username, password, fullName, status);
         this.intakeCode = intakeCode;
+        this.email = email;
         this.contactNumber = contactNumber;
         this.emergencyContact = emergencyContact; 
     }

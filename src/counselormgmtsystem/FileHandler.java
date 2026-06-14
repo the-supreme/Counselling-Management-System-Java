@@ -13,10 +13,9 @@ import java.io.IOException;
 
 public class FileHandler {
     public static ArrayList<User> userList = new ArrayList<>();
-
-    // public static ArrayList<Appointment> apptList = new ArrayList<>();
-    // public static ArrayList<Roster> rosterList = new ArrayList<>();
-    // public static ArrayList<ConsultationRecord> recordList = new ArrayList<>();
+    public static ArrayList<Appointment> apptList = new ArrayList<>();
+    public static ArrayList<Roster> rosterList = new ArrayList<>();
+    public static ArrayList<ConsultationRecords> consultList = new ArrayList<>();
 
     // methods
 
@@ -24,13 +23,14 @@ public class FileHandler {
     // then we load data from other appointment, rosters, consultationrecords
 
     public void loadDataFromFiles() {
+        // Read Users File
          try (BufferedReader uReader = new BufferedReader(new FileReader("dataFiles/users.txt"))) {
             System.out.println("Users File successfully opened!");
             String line;
             while ((line = uReader.readLine()) != null) {
                 String[] userData = line.trim().split("\\|");
 
-                // if ADMIN DATA
+                // Read Admin File and Add to UserList
                 if (userData[0].startsWith("ADM")) {
                     try (BufferedReader adminReader = new BufferedReader(new FileReader("dataFiles/admin.txt"))) {
                         String adminLine;
@@ -49,14 +49,14 @@ public class FileHandler {
 
                 }
 
-                // if STUDENT DATA
+                // Read Student File and Add to UserList
                 if (userData[0].startsWith("STD")) {
                     try (BufferedReader studentReader = new BufferedReader(new FileReader("dataFiles/student.txt"))) {
                         String studentLine;
                         while ((studentLine = studentReader.readLine()) != null) {
                             String[] studentData = studentLine.trim().split("\\|");
                             if (studentData[0].equals(userData[0])) {
-                                Student student = new Student(userData[0], userData[1], userData[2], userData[3], userData[4], studentData[1], studentData[2], studentData[3]);
+                                Student student = new Student(userData[0], userData[1], userData[2], userData[3], userData[4], studentData[1], studentData[2], studentData[3], studentData[4]);
                                 userList.add(student);
                                 break;
                             }
@@ -68,6 +68,7 @@ public class FileHandler {
 
                 }
 
+                // Read Receptionist File and Add to UserList
                 if (userData[0].startsWith("REC")) {
                     try (BufferedReader recepReader = new BufferedReader(new FileReader("dataFiles/receptionist.txt"))) {
                         String recepLine;
@@ -86,6 +87,7 @@ public class FileHandler {
 
                 }
 
+                // Read Counselor File and Add to UserList
                 if (userData[0].startsWith("CNS")) {
                     try (BufferedReader counsReader = new BufferedReader(new FileReader("dataFiles/counselor.txt"))) {
                         String counsLine;
@@ -103,23 +105,218 @@ public class FileHandler {
                     }
 
                 }
-
             }
+            
         }
         catch (IOException e) {
             System.out.println("Counselor File can't be accessed.");
         }
 
-        for (User user: userList) {
-            System.out.println(user);
+        // Read Appointments File
+        try (BufferedReader apptReader = new BufferedReader(new FileReader("dataFiles/appointments.txt"))) {
+            String apptline;
+            while((apptline = apptReader.readLine()) != null) {
+                String[] appointmentData = apptline.trim().split("\\|");
+                Appointment appt = new Appointment(appointmentData[0], appointmentData[1], appointmentData[2], appointmentData[3], appointmentData[4], appointmentData[5], appointmentData[6], appointmentData[7]);
+                apptList.add(appt);
+            }
         }
+        catch(IOException e) {
+            System.out.println("Cant open the Appointment File");
+        }
+
+        try (BufferedReader rosterReader = new BufferedReader(new FileReader("dataFiles/rosters.txt"))) {
+            String rosterLine;
+            while((rosterLine = rosterReader.readLine()) != null) {
+                String[] rosterData = rosterLine.trim().split("\\|");
+                Roster roster = new Roster(rosterData[0], rosterData[1], rosterData[2], rosterData[3], rosterData[4], rosterData[5]);
+                rosterList.add(roster);
+            }
+        }
+        catch(IOException e) {
+            System.out.println("Cant open the Roster File");
+        }
+
+        try (BufferedReader consultReader = new BufferedReader(new FileReader("dataFiles/consultationRecords.txt"))) {
+            String consultLine;
+            while((consultLine = consultReader.readLine()) != null) {
+                String[] consultData = consultLine.trim().split("\\|");
+                ConsultationRecords consult = new ConsultationRecords(consultData[0], consultData[1], consultData[2], consultData[3], consultData[4], consultData[5], consultData[6]);
+                consultList.add(consult);
+            }
+        }
+
+        catch(IOException e) {
+            System.out.println("Cant open the Roster File");
+        }
+
+        System.out.println(userList);
+        System.out.println();
+        System.out.println(apptList);
+        System.out.println();
+        System.out.println(consultList);
+        System.out.println();
+        System.out.println(rosterList);
+
     }
 
-    // Static saveDataToFiles(String fileName) {
+    public void saveDataToFiles() {
+        // basically take all the items from arraylists, identify category, write the data to different files
+        ArrayList<String> adminList = new ArrayList<>(); 
+        ArrayList<String> studentList = new ArrayList<>(); 
+        ArrayList<String> counselorList = new ArrayList<>(); 
+        ArrayList<String> receptionistList = new ArrayList<>(); 
+        ArrayList<String> userDataList = new ArrayList<>();
 
-    // }
 
-    // checkLogin(String username, String password) {
+        for (User user: userList) {
+            String userText = user.ID + "|" + user.username + "|" + user.password + "|" + user.fullName + "|" + user.status;
+            userDataList.add(userText);
+            if (user instanceof Admin admin) {
+                String adminText = admin.ID + "|" + admin.contactNumber + "|" + admin.email + "|" + admin.officeRoom; 
+                adminList.add(adminText);
+            }
 
-    // }
+            if (user instanceof Student student) {
+                String studentText = student.ID + "|" + student.intakeCode + "|" + student.contactNumber + "|" + student.email + "|" + student.emergencyContact; 
+                studentList.add(studentText);
+                
+            }
+
+            if (user instanceof Counselor counselor) {
+                String counselorText = counselor.ID + "|" + counselor.specialization + "|" + counselor.contactNumber + "|" + counselor.email; 
+                counselorList.add(counselorText);
+            }
+
+            if (user instanceof Receptionist receptionist) {
+                String receptionistText = receptionist.ID + "|" + receptionist.contactNumber + "|" + receptionist.email; 
+                receptionistList.add(receptionistText);
+            }
+        }
+
+        // write into the users file
+        try (BufferedWriter userWriter = new BufferedWriter(new FileWriter("dataFiles/users.txt"))) {
+            for (String user: userDataList) {
+                userWriter.write(user);
+                userWriter.newLine();
+                System.out.println("File update Success!");
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open the users file");
+        }
+
+        try (BufferedWriter adminWriter = new BufferedWriter(new FileWriter("dataFiles/admin.txt"))) {
+            for (String admin: adminList) {
+                adminWriter.write(admin);
+                adminWriter.newLine();
+                System.out.println("File update Success!");
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open the admin file");
+        }
+
+        try (BufferedWriter counselorWriter = new BufferedWriter(new FileWriter("dataFiles/counselor.txt"))) {
+            for (String counselor: counselorList) {
+                counselorWriter.write(counselor);
+                counselorWriter.newLine();
+                System.out.println("File update Success!");
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open the counselor file");
+        }
+
+        try (BufferedWriter studentWriter = new BufferedWriter(new FileWriter("dataFiles/student.txt"))) {
+            for (String student: studentList) {
+                studentWriter.write(student);
+                studentWriter.newLine();
+                System.out.println("File update Success!");
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open the student file");
+        }
+
+        try (BufferedWriter receptionistWriter = new BufferedWriter(new FileWriter("dataFiles/receptionist.txt"))) {
+            for (String receptionist: receptionistList) {
+                receptionistWriter.write(receptionist);
+                receptionistWriter.newLine();
+                System.out.println("File update Success!");
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open the receptionist file");
+        }
+
+        // write into rosters
+        ArrayList<String> listOfRosterText = new ArrayList<>(); 
+
+        for (Roster roster: rosterList) {
+            String rosterText = roster.rosterID + "|" + roster.counselorID + "|" + roster.date + roster.startTime + "|" + roster.endTime + "|" + roster.status;
+            listOfRosterText.add(rosterText);
+        }
+
+        try (BufferedWriter rosterWriter = new BufferedWriter(new FileWriter("dataFiles/rosters.txt"))) {
+            for (String roster: listOfRosterText) {
+                rosterWriter.write(roster);
+                rosterWriter.newLine();
+                System.out.println("File update Success!");
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open the Roster file");
+        }
+
+        // write into appointment
+
+        ArrayList<String> listOfApptText = new ArrayList<>(); 
+
+        for (Appointment appt: apptList) {
+            String apptText = appt.appointmentID + "|" + appt.studentID + "|" + appt.counselorID + appt.date + "|" + appt.time + "|" + appt.bookingType + "|" + appt.status;
+            listOfApptText.add(apptText);
+        }
+
+        try (BufferedWriter apptWriter = new BufferedWriter(new FileWriter("dataFiles/appointments.txt"))) {
+            for (String appt: listOfApptText) {
+                apptWriter.write(appt);
+                apptWriter.newLine();
+                System.out.println("File update Success!");
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open the Appointments file");
+        }
+
+        // consultationrecords
+
+        ArrayList<String> listOfRecords = new ArrayList<>(); 
+
+        for (ConsultationRecords record: consultList) {
+            String consultText = record.recordID + "|" + record.appointmentID + "|" + record.studentID + "|" + record.counselorID + "|" + record.date + "|" + record.notes + "|" + record.recommendations;
+            listOfRecords.add(consultText);
+        }
+
+        try (BufferedWriter recordWriter = new BufferedWriter(new FileWriter("dataFiles/consultationRecords.txt"))) {
+            for (String record: listOfRecords) {
+                recordWriter.write(record);
+                recordWriter.newLine();
+                System.out.println("File update Success!");
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open the ConsultationRecords file");
+        }
+
+    }
+
+    public boolean checkLogin(String username, String password) {
+        for (User user: userList) {
+            if (user.username == username && user.password == password) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -13,6 +13,7 @@ public class Receptionist extends User {
     @Override
     public String toString() {
         return "User: " + this.ID
+        
          + " " + this.username + " " + this.password + " " + this.fullName + " " + this.status + " " + this.contactNumber + " " + this.email + " ";
     }
 

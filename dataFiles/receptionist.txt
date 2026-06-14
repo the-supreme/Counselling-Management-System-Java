@@ -1,4 +1,2 @@
 REC001|011-2223334|kumar.s@apu.edu.my
-REC002|016-4445556|amy.tan@apu.edu.my
-REC003|017-8887776|lisa.k@apu.edu.my
-REC004|012-9993331|john.d@apu.edu.my
+REC002|011-2223334|kumar.s@apu.edu.my
