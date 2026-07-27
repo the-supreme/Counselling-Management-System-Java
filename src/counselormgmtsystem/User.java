@@ -1,7 +1,7 @@
 package counselormgmtsystem;
 
 //abstract because dont want to randomly create a user object
-abstract class User {
+public abstract class User {
     protected String ID;
     protected String username;
     protected String password;

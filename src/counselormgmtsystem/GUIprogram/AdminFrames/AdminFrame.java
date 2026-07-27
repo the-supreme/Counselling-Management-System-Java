@@ -51,6 +51,8 @@ public class AdminFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        editBtn = new javax.swing.JButton();
+        saveBtn = new javax.swing.JButton();
         sidebarPanel = new javax.swing.JPanel();
         profileHeader = new javax.swing.JPanel();
         userIcon = new javax.swing.JLabel();
@@ -69,15 +71,32 @@ public class AdminFrame extends javax.swing.JFrame {
         adminPageUserIcon = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        FNTF = new javax.swing.JTextField();
+        UNTF = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        EmailTF = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        ORTF = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        CNTF = new javax.swing.JTextField();
+        editBtn1 = new javax.swing.JButton();
+        saveBtn1 = new javax.swing.JButton();
+
+        editBtn.setBackground(new java.awt.Color(0, 0, 0));
+        editBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
+        editBtn.setBorder(null);
+        editBtn.setBorderPainted(false);
+        editBtn.setContentAreaFilled(false);
+        editBtn.addActionListener(this::editBtnActionPerformed);
+
+        saveBtn.setBackground(new java.awt.Color(0, 0, 0));
+        saveBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diskette.png"))); // NOI18N
+        saveBtn.setBorder(null);
+        saveBtn.setBorderPainted(false);
+        saveBtn.setContentAreaFilled(false);
+        saveBtn.setFocusPainted(false);
+        saveBtn.addActionListener(this::saveBtnActionPerformed);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -281,39 +300,39 @@ public class AdminFrame extends javax.swing.JFrame {
         jLabel2.setText("Full Name: ");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 80, 30));
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField1.setText("John Doe");
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 230, 30));
+        FNTF.setBackground(new java.awt.Color(255, 255, 255));
+        FNTF.setForeground(new java.awt.Color(0, 0, 0));
+        FNTF.setText("John Doe");
+        FNTF.addActionListener(this::FNTFActionPerformed);
+        jPanel1.add(FNTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 230, 30));
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField2.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField2.setText("john_doe");
-        jTextField2.addActionListener(this::jTextField2ActionPerformed);
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, 230, 30));
+        UNTF.setBackground(new java.awt.Color(255, 255, 255));
+        UNTF.setForeground(new java.awt.Color(0, 0, 0));
+        UNTF.setText("john_doe");
+        UNTF.addActionListener(this::UNTFActionPerformed);
+        jPanel1.add(UNTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, 230, 30));
 
         jLabel3.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Username:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 80, 30));
 
-        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField3.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField3.setText("john_doe@gmail.com");
-        jTextField3.addActionListener(this::jTextField3ActionPerformed);
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 110, 190, 30));
+        EmailTF.setBackground(new java.awt.Color(255, 255, 255));
+        EmailTF.setForeground(new java.awt.Color(0, 0, 0));
+        EmailTF.setText("john_doe@gmail.com");
+        EmailTF.addActionListener(this::EmailTFActionPerformed);
+        jPanel1.add(EmailTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 110, 190, 30));
 
         jLabel4.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Email:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 80, 80, 30));
 
-        jTextField4.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField4.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField4.setText("Level 3, Oklahoma");
-        jTextField4.addActionListener(this::jTextField4ActionPerformed);
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 220, 190, 30));
+        ORTF.setBackground(new java.awt.Color(255, 255, 255));
+        ORTF.setForeground(new java.awt.Color(0, 0, 0));
+        ORTF.setText("Level 3, Oklahoma");
+        ORTF.addActionListener(this::ORTFActionPerformed);
+        jPanel1.add(ORTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 220, 190, 30));
 
         jLabel5.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
@@ -325,11 +344,28 @@ public class AdminFrame extends javax.swing.JFrame {
         jLabel6.setText("Contact Number:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 300, 140, 30));
 
-        jTextField5.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField5.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField5.setText("0132312312");
-        jTextField5.addActionListener(this::jTextField5ActionPerformed);
-        jPanel1.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 330, 190, 30));
+        CNTF.setBackground(new java.awt.Color(255, 255, 255));
+        CNTF.setForeground(new java.awt.Color(0, 0, 0));
+        CNTF.setText("0132312312");
+        CNTF.addActionListener(this::CNTFActionPerformed);
+        jPanel1.add(CNTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 330, 190, 30));
+
+        editBtn1.setBackground(new java.awt.Color(0, 0, 0));
+        editBtn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
+        editBtn1.setBorder(null);
+        editBtn1.setBorderPainted(false);
+        editBtn1.setContentAreaFilled(false);
+        editBtn1.addActionListener(this::editBtn1ActionPerformed);
+        jPanel1.add(editBtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, 40, 40));
+
+        saveBtn1.setBackground(new java.awt.Color(0, 0, 0));
+        saveBtn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diskette.png"))); // NOI18N
+        saveBtn1.setBorder(null);
+        saveBtn1.setBorderPainted(false);
+        saveBtn1.setContentAreaFilled(false);
+        saveBtn1.setFocusPainted(false);
+        saveBtn1.addActionListener(this::saveBtn1ActionPerformed);
+        jPanel1.add(saveBtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 410, 40, 40));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 660, 540));
 
@@ -385,25 +421,81 @@ public class AdminFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_navItem4MouseExited
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void CNTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CNTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_CNTFActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void EmailTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_EmailTFActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void UNTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UNTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_UNTFActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void FNTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FNTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_FNTFActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void ORTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ORTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_ORTFActionPerformed
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        setEditMode(true);
+        FNTF.requestFocus(); // Place cursor in the first box
+    }//GEN-LAST:event_editBtnActionPerformed
+
+    private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
+        String newFullName = FNTF.getText().trim();
+        String newUsername = UNTF.getText().trim();
+        String newEmail = EmailTF.getText().trim();
+        String newContact = CNTF.getText().trim();
+
+        // Validation check
+        if (newFullName.isEmpty() || newUsername.isEmpty() || newEmail.isEmpty() || newContact.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields are required!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return ;
+        }
+
+        currentUser.setUsername(newUsername);
+        currentUser.setFullName(newFullName);
+        currentUser.setReceptionistEmail(newEmail);
+        currentUser.setReceptionistNumber(newContact);
+
+        usernameText.setText(currentUser.getUsername());
+        setEditMode(false);
+
+        JOptionPane.showMessageDialog(this, "Profile updated in session!");
+    }//GEN-LAST:event_saveBtnActionPerformed
+
+    private void editBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtn1ActionPerformed
+        setEditMode(true);
+        FNTF.requestFocus(); // Place cursor in the first box
+    }//GEN-LAST:event_editBtn1ActionPerformed
+
+    private void saveBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtn1ActionPerformed
+        String newFullName = FNTF.getText().trim();
+        String newUsername = UNTF.getText().trim();
+        String newEmail = EmailTF.getText().trim();
+        String newContact = CNTF.getText().trim();
+
+        // Validation check
+        if (newFullName.isEmpty() || newUsername.isEmpty() || newEmail.isEmpty() || newContact.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields are required!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return ;
+        }
+
+        currentUser.setUsername(newUsername);
+        currentUser.setFullName(newFullName);
+        currentUser.setReceptionistEmail(newEmail);
+        currentUser.setReceptionistNumber(newContact);
+
+        usernameText.setText(currentUser.getUsername());
+        setEditMode(false);
+
+        JOptionPane.showMessageDialog(this, "Profile updated in session!");
+    }//GEN-LAST:event_saveBtn1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -430,7 +522,14 @@ public class AdminFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField CNTF;
+    private javax.swing.JTextField EmailTF;
+    private javax.swing.JTextField FNTF;
+    private javax.swing.JTextField ORTF;
+    private javax.swing.JTextField UNTF;
     private javax.swing.JLabel adminPageUserIcon;
+    private javax.swing.JButton editBtn;
+    private javax.swing.JButton editBtn1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -438,11 +537,6 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JButton logoutButton;
     private javax.swing.JPanel navItem01;
     private javax.swing.JPanel navItem02;
@@ -454,6 +548,8 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JLabel navItemText3;
     private javax.swing.JLabel navItemText4;
     private javax.swing.JPanel profileHeader;
+    private javax.swing.JButton saveBtn;
+    private javax.swing.JButton saveBtn1;
     private javax.swing.JPanel sidebarPanel;
     private javax.swing.JLabel userIcon;
     private javax.swing.JLabel usernameText;

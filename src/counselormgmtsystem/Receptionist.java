@@ -30,12 +30,33 @@ public class Receptionist extends User {
 
     // manage student accounts
 
-    public void createStudentAccount(String username, String password, String fullName, String intakeCode, String email, String contactNumber, String emergencyContact) {
-        String newStudentID = FileHandler.generateUserID("STD", "student.txt");
+    public boolean createStudentAccount(String username, String password, String fullName, String intakeCode, String email, String contactNumber, String emergencyContact) {
+        
+        String newStudentID = FileHandler.generateUserID("STD", FileHandler.userList, u -> u.getID());
         Student newStudent = new Student(newStudentID, username, password, fullName, intakeCode, email, contactNumber, emergencyContact);  
         FileHandler.userList.add(newStudent);
+        return true;
     }
 
+    public boolean updateStudentAccount(String studentID, String username, String password, String fullName, String intakeCode, String email, String contactNumber, String emergencyContact) {
+        for (User u : FileHandler.userList) {
+            if (u.getID().equals(studentID) && u instanceof Student s) {
+                s.setUsername(username);
+                s.setpassword(password);
+                s.setFullName(fullName);       // Adjust casing to match your Student getters/setters
+                s.setintakeCode(intakeCode);
+                s.setStudentEmail(email);
+                s.setContactNumber(contactNumber);
+                s.getEmergencyContact();      // Setters as appropriate
+                return true;
+            }
+        }
+        return false; // Student ID not found
+    }
+    
+    public boolean deleteStudentAccount(String studentID) {
+        return FileHandler.userList.removeIf(u -> u.getID().equals(studentID));
+    }
 
     @Override
     public String toString() {

@@ -47,3 +47,6 @@ choose actions:
 
 figure out error in receptionist read and write - only got 2 lines of data
 write code for login, redirect to display actions
+
+student table
+String ID, String username, String fullName, String intakeCode, String email, String contactNumber, String emergencyContact

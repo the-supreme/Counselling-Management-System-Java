@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReceptionistMainFrame.class.getName());
     private Receptionist currentUser;
-    private boolean isEditing = false; // Tracks mode state
     public ReceptionistMainFrame(Receptionist receptionist) {
         this.currentUser = receptionist;
         initComponents();
@@ -47,6 +46,7 @@ import javax.swing.JOptionPane;
                 fh.saveDataToFiles();
             }
         });
+       
     }
     
     /**
@@ -274,6 +274,9 @@ import javax.swing.JOptionPane;
 
         navItem01.setBackground(new java.awt.Color(0, 0, 102));
         navItem01.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                navItem01MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 navItem01MouseEntered(evt);
             }
@@ -466,6 +469,18 @@ import javax.swing.JOptionPane;
         setEditMode(true);
         FNTF.requestFocus(); // Place cursor in the first box
     }//GEN-LAST:event_editBtnActionPerformed
+
+    private void navItem01MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem01MouseClicked
+        try {
+            // Try creating and displaying the frame
+            ManageStudent frame = new ManageStudent(this.currentUser);
+            frame.setVisible(true);
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: " + t.toString());
+        }
+    }//GEN-LAST:event_navItem01MouseClicked
 
     
     

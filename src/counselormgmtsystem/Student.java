@@ -13,7 +13,39 @@ public class Student extends User{
         this.contactNumber = contactNumber;
         this.emergencyContact = emergencyContact; 
     }
+    
+    public String getStudentEmail() {
+        return this.email;
+    }
 
+    public void setStudentEmail(String email) {
+        this.email = email;
+    }
+    
+    public String getintakeCode() {
+        return this.intakeCode;
+    }
+
+    public void setintakeCode(String email) {
+        this.intakeCode = intakeCode;
+    }
+    
+    public String getContactNumber() {
+        return this.contactNumber;
+    }
+
+    public void setContactNumber(String email) {
+        this.contactNumber = contactNumber;
+    }
+    
+    public String getEmergencyContact() {
+        return this.emergencyContact;
+    }
+
+    public void setEmergencyContact(String email) {
+        this.emergencyContact = emergencyContact;
+    }
+    
     @Override
     public String toString() {
         return "User: " + this.ID

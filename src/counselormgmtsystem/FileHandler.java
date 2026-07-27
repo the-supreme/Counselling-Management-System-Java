@@ -1,11 +1,11 @@
 package counselormgmtsystem;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
 public class FileHandler {
@@ -159,7 +159,7 @@ public class FileHandler {
         }
     }
 
-    public void saveDataToFiles() {
+    public static void saveDataToFiles() {
         ArrayList<String> adminList = new ArrayList<>(); 
         ArrayList<String> studentList = new ArrayList<>(); 
         ArrayList<String> counselorList = new ArrayList<>(); 
@@ -289,34 +289,37 @@ public class FileHandler {
         return false;
     }
 
-    public static String generateUserID(String prefix, String filename) {
+    /**
+     * @param <T> The type of objects contained in the list
+     * @param prefix The ID prefix (e.g., "STD", "APT", "COU")
+     * @param list The list to scan (e.g., FileHandler.userList)
+     * @param idExtractor A function/lambda to extract the String ID from each object
+     * @return The next formatted ID string (e.g., "STD004")
+    */     
+    
+    public static <T> String generateUserID(String prefix, List<T> list, java.util.function.Function<T, String> idExtractor) {
         int max_id = 0;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-
-                String[] data = line.split("\\|"); 
-                if (data.length > 0 && !data[0].isEmpty()) {
-                    String fullId = data[0].trim();
-                    String numericPart = fullId.replaceAll("\\D+", ""); 
+        // 1. Scan the list in memory
+        if (list != null && !list.isEmpty()) {
+            for (T item : list) {
+                String id = idExtractor.apply(item);
+                if (id != null && id.startsWith(prefix)) {
+                    String numericPart = id.replaceAll("\\D+", ""); // Extract digits
                     if (!numericPart.isEmpty()) {
-                        int current_id_num = Integer.parseInt(numericPart);
-                        if (current_id_num > max_id) {
-                            max_id = current_id_num;
-                        }
+                        try {
+                            int num = Integer.parseInt(numericPart);
+                            if (num > max_id) {
+                                max_id = num;
+                            }
+                        } catch (NumberFormatException ignored) {}
                     }
                 }
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found, creating initial ID.");
-        } catch (IOException e) {
-            return "Error: Cannot read file";
         }
 
+        // 2. Generate next formatted ID (e.g., APT001, STD005)
         int new_num = max_id + 1;
-        return prefix + String.format("%02d", new_num);
-    }    
+        return prefix + String.format("%03d", new_num);
+    }
 }
