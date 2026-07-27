@@ -1,6 +1,6 @@
 List of Classes
 
-Class User
+*SETTLE* Class User
 ID, username, password, fullName, status
 
 	Class Counselor extends User
@@ -8,6 +8,10 @@ ID, username, password, fullName, status
 	Class Receptionist extends User
 		contactNumber, email
 		Method: generateQueueNumber()
+		// manage student accounts
+		// manage appointments
+		// assign counselor to appointments
+		// generate queue numbers
 	Class Student extends User
 		intakeCode, contactNumber, emergencyContact
 	Class Admin extends User
@@ -22,9 +26,24 @@ Class Appointment
 Class ConsultationRecord
 	recordID, appointmentID, studentID, counselorID, date, notes, recommendationsCouser
 
-Class FileHandler
+*SETTLE* Class FileHandler
 	ArrayList<User>, ArrayList<Appointment>, ArrayList<Roster>, ArrayList<ConsultationRecord>
 	Methods: loadDataFromFiles(), saveDataToFiles(), checkLogin(user, pass)
 
 
 
+
+manage student accounts
+
+choose actions: 
+1. update student record
+2. manage appointment
+	- create/update/cancel new appointment
+3. assign counselor to appointment
+4. generate queue number
+// make login on main code, login with student username and password, create function to ask what action:- Delete/Create/Update -> use it to update
+// make appointments 
+
+
+figure out error in receptionist read and write - only got 2 lines of data
+write code for login, redirect to display actions

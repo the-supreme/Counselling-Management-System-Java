@@ -6,20 +6,18 @@ abstract class User {
     protected String username;
     protected String password;
     protected String fullName;
-    protected String status;
 
 
     //constructor
-    public User(String ID, String username, String password, String fullName, String status) {
+    public User(String ID, String username, String password, String fullName) {
         this.ID = ID;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
-        this.status = status;
     }
 
     // getter & setter
-    public String getID(String ID) {
+    public String getID() {
         return ID;
     }
 
@@ -27,7 +25,7 @@ abstract class User {
         this.ID = ID;
     }
 
-    public String getUsername(String username) {
+    public String getUsername() {
         return username;
     }
 
@@ -35,7 +33,7 @@ abstract class User {
         this.username = username;
     }    
     
-    public String getPassword(String password) {
+    public String getPassword() {
         return password;
     }
 
@@ -43,20 +41,12 @@ abstract class User {
         this.password = password;
     }    
     
-    public String getfullName(String fullName) {
+    public String getfullName() {
         return fullName;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }    
-    
-    public String getStatus(String status) {
-        return status;
-    }
-
-    public void setstatus(String status) {
-        this.status = status;
-    }    
-    
+        
 }
