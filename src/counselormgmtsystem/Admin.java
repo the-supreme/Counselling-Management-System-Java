@@ -12,14 +12,19 @@ public class Admin extends User{
     String email;
     String officeRoom;
 
-    Admin(String ID, String username, String password, String fullName, String status, String contactNumber, String email, String officeRoom) {
-        super(ID, username, password, fullName, status);
+    Admin(String ID, String username, String password, String fullName, String contactNumber, String email, String officeRoom) {
+        super(ID, username, password, fullName);
         this.contactNumber = contactNumber;
         this.email = email;
         this.officeRoom = officeRoom; 
     }
 
-    // ---------- Getters / Setters ----------
+    Admin(String ID, String username, String password, String fullName, String contactNumber, String email) {
+        super(ID, username, password, fullName);
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.officeRoom = "TBD"; 
+    }
 
     public String getContactNumber() {
         return contactNumber;
@@ -55,7 +60,6 @@ public class Admin extends User{
                         max = num;
                     }
                 } catch (NumberFormatException ignored) {
-                    // skip malformed IDs
                 }
             }
         }
@@ -65,7 +69,7 @@ public class Admin extends User{
     public String generateNextCounselorID() {
         int max = 0;
         for (User u : FileHandler.userList) {
-            if (u instanceof Counselor && u.ID != null && u.ID.startsWith("COU")) {
+            if (u instanceof Counselor && u.ID != null && u.ID.startsWith("CNS")) {
                 try {
                     int num = Integer.parseInt(u.ID.substring(3));
                     if (num > max) {
@@ -76,10 +80,11 @@ public class Admin extends User{
                 }
             }
         }
-        return String.format("COU%03d", max + 1);
+        return String.format("CNS%03d", max + 1);
     }
     
-    public void manageUserAccounts(ArrayList<User> userList, User targetUser, String action) {
+    //overload 1 - manage users
+    public void manageRecord(ArrayList<User> userList, User targetUser, String action) {        
         if (userList == null || targetUser == null || action == null) {
             System.out.println("Error: invalid arguments supplied to manageUserAccounts().");
             return;
@@ -124,204 +129,9 @@ public class Admin extends User{
         }
     
     }
-    
-    public String validateUser(String name, String contact, String email, String password, boolean isNewUser, String currentUserId) {
-        //check if empty
-        if (name.trim().isEmpty() || contact.trim().isEmpty() || email.trim().isEmpty()) {
-            return "Full Name, Contact Number and Email are required.";
-        }
-
-        //check for format
-        if (!email.trim().matches("^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-            return "Please enter a valid email address.";
-        }
-        if (!contact.trim().matches("^[0-9+\\-\\s]{7,15}$")) {
-            return "Please enter a valid contact number.";
-        }
-
-        //check 
-        if (isNewUser || (password != null && !password.trim().isEmpty())) {
-            if (password.length() < 8) {
-                return "Password must be at least 8 characters long.";
-            }
-            if (!password.matches(".*\\d.*")) {
-                return "Password must contain at least one number.";
-            }
-        }
-
-        for (User u : FileHandler.userList) {
-            
-            // Skip the user we are currently editing
-            if (currentUserId != null && u.ID.equals(currentUserId)) {
-                continue; 
-            }
-
-            String existingEmail = "";
-            String existingContact = "";
-
-            // Safely cast to the specific user type to access their unique variables
-            if (u instanceof Counselor c) {
-                existingEmail = c.email;            // Use .getEmail() if private
-                existingContact = c.contactNumber;  // Use .getContactNumber() if private
-            } 
-            else if (u instanceof Receptionist r) {
-                existingEmail = r.email;
-                existingContact = r.contactNumber;
-            }
-            // Note: If Students also have emails/contacts in your system, 
-            // add another 'else if (u instanceof Student s)' right here!
-
-            // Perform the duplicate checks using the extracted data
-            if (!existingEmail.isEmpty() && existingEmail.equalsIgnoreCase(email.trim())) {
-                return "A user with this email address already exists.";
-            }
-            if (!existingContact.isEmpty() && existingContact.equals(contact.trim())) {
-                return "A user with this contact number already exists.";
-            }
-        }
-
-        return null; // Null means valid!
-    }
-
-    public String validateRoster(String counselorId, String dateStr, String startStr, String endStr, String currentRosterId) {
-        // 1. Empty Checks
-        if (counselorId.trim().isEmpty() || dateStr.trim().isEmpty() || startStr.trim().isEmpty() || endStr.trim().isEmpty()) {
-            return "Counselor ID, Date, Start Time and End Time are required.";
-        }
-
-        // --- NEW: 2. Counselor Existence Check ---
-        boolean counselorExists = false;
-        for (User u : FileHandler.userList) {
-            // Assuming your ID variable is public (u.ID). If it's private, use u.getID()
-            if (u instanceof Counselor && u.ID.equals(counselorId.trim())) {
-                counselorExists = true;
-                break; // We found them, no need to keep looping!
-            }
-        }
-        if (!counselorExists) {
-            return "The provided Counselor ID does not exist in the system.";
-        }
-        // -----------------------------------------
-
-        LocalDate rosterDate;
-        LocalTime startTime, endTime;
-
-        // 3. Formatting Checks
-        try {
-            rosterDate = LocalDate.parse(dateStr.trim());
-        } catch (DateTimeParseException e) {
-            return "Date must be in yyyy-MM-dd format.";
-        }
-
-        try {
-            startTime = LocalTime.parse(startStr.trim());
-            endTime = LocalTime.parse(endStr.trim());
-        } catch (DateTimeParseException e) {
-            return "Times must be in HH:mm 24-hour format (e.g. 14:30).";
-        }
-
-        // 4. Logical Time Check
-        if (!endTime.isAfter(startTime)) {
-            return "End Time must be after Start Time.";
-        }
-
-        // 5. Working Hours Check
-        LocalTime shiftStartLimit = LocalTime.of(8, 0);  // 08:00
-        LocalTime shiftEndLimit = LocalTime.of(17, 0); // 17:00
-
-        if (startTime.isBefore(shiftStartLimit) || endTime.isAfter(shiftEndLimit)) {
-            return "Roster times must be within working hours (08:00 to 17:00).";
-        }
-
-        // 6. Reasonable Date Limits
-        LocalDate today = LocalDate.now();
-        if (rosterDate.isBefore(today)) {
-            return "You cannot schedule a roster for a past date.";
-        }
-        if (rosterDate.isAfter(today.plusMonths(3))) {
-            return "You cannot schedule a roster more than 3 months in advance.";
-        }
-
-        // 7. Overlap/Duplicate Check
-        for (Roster r : FileHandler.rosterList) {
-            if (currentRosterId != null && r.rosterID.equals(currentRosterId)) {
-                continue; 
-            }
-            if (r.counselorID.equals(counselorId.trim()) && r.date.equals(dateStr.trim())) {
-                LocalTime existingStart = LocalTime.parse(r.startTime);
-                LocalTime existingEnd = LocalTime.parse(r.endTime);
-
-                if (startTime.isBefore(existingEnd) && endTime.isAfter(existingStart)) {
-                    return "This counselor already has an overlapping shift on this date (" + r.startTime + " - " + r.endTime + ").";
-                }
-            }
-        }
-
-        return null; 
-    }
-    
-    //calculate appointment stats 
-   public void updateApptStats(String dateFilter, adminApptStats frame) {
-        int total = 0, completed = 0, cancelled = 0, pending = 0;
-        int morningCount = 0, afternoonCount = 0, onlineCount = 0, walkInCount = 0;
-
-        // Parallel lists for counselor stats
-        java.util.ArrayList<String> counselorIds = new java.util.ArrayList<>();
-        java.util.ArrayList<Integer> counts = new java.util.ArrayList<>();
-
-        for (Appointment appt : FileHandler.apptList) {
-            if (dateFilter != null && !dateFilter.trim().isEmpty()) {
-                if (!appt.getDate().startsWith(dateFilter.trim())) continue;
-            }
-
-            total++;
-            String status = appt.getStatus();
-            if (status.equalsIgnoreCase("Completed")) completed++;
-            else if (status.equalsIgnoreCase("Cancelled")) cancelled++;
-            else pending++;
-
-            if (appt.getTime().compareTo("12:00") < 0) morningCount++;
-            else afternoonCount++;
-
-            String type = appt.getBookingType();
-            if (type.equalsIgnoreCase("Online")) onlineCount++;
-            else if (type.toLowerCase().contains("walk")) walkInCount++;
-
-            if (!status.equalsIgnoreCase("Cancelled")) {
-                String cID = appt.getCounselorID();
-                int index = counselorIds.indexOf(cID);
-                if (index == -1) {
-                    counselorIds.add(cID);
-                    counts.add(1);
-                } else {
-                    counts.set(index, counts.get(index) + 1);
-                }
-            }
-        }
-
-        // Directly update the GUI fields using the frame reference
-        frame.getApptBookedTf().setText(String.valueOf(total));
-        frame.getApptCompletedTf().setText(String.valueOf(completed));
-        frame.getApptCancelledTf().setText(String.valueOf(cancelled));
-        frame.getApptPendingTf().setText(String.valueOf(pending));
-
-        double rate = (completed + cancelled > 0) ? ((double) completed / (completed + cancelled)) * 100 : 0.0;
-        frame.getCompletionRateTf().setText(String.format("%.1f%%", rate));
-
-        frame.getMorningTf().setText(String.valueOf(morningCount));
-        frame.getAfternoonTf().setText(String.valueOf(afternoonCount));
-        frame.getOnlineTf().setText(String.valueOf(onlineCount));
-        frame.getWalkInTf().setText(String.valueOf(walkInCount));
-
-        // Update table
-        frame.getModel().setRowCount(0);
-        for (int i = 0; i < counselorIds.size(); i++) {
-            frame.getModel().addRow(new Object[]{counselorIds.get(i), counts.get(i)});
-        }
-    }
-
-   // --- Logic for Adding Roster ---
-    public void manageRosters(ArrayList<Roster> rosterList, Roster targetRoster, String action) {
+   
+    //overload 2 - manage roster 
+    public void manageRecord(ArrayList<Roster> rosterList, Roster targetRoster, String action) {
         if (rosterList == null || targetRoster == null || action == null) {
             System.out.println("Error: invalid arguments supplied to manageRosters().");
             return;
@@ -329,7 +139,6 @@ public class Admin extends User{
 
         switch (action.trim().toUpperCase()) {
             case "ADD":
-                // Logic to generate ID and add
                 int max = 0;
                 for (Roster r : rosterList) {
                     try {
@@ -368,11 +177,187 @@ public class Admin extends User{
                 System.out.println("Error: unsupported action \"" + action + "\". Use ADD, UPDATE, or DELETE.");
         }
         
-        // Save to file after any change
         new FileHandler().saveDataToFiles();
     }
     
-// --- Logic for Report Generation ---
+    public String validateData(String name, String contact, String email, String password, boolean isNewUser, String currentUserId) {        //check if empty
+        if (name.trim().isEmpty() || contact.trim().isEmpty() || email.trim().isEmpty()) {
+            return "Full Name, Contact Number and Email are required.";
+        }
+
+        //check for format
+        if (!email.trim().matches("^[\\w.+-]+@([\\w-]+\\.)+[a-zA-Z]{2,}$")) {
+            return "Please enter a valid email address.";
+        }
+        
+        if (!contact.trim().matches("^[0-9+\\-\\s]{7,15}$")) {
+            return "Please enter a valid contact number.";
+        }
+
+        //check 
+        if (isNewUser || (password != null && !password.trim().isEmpty())) {
+            if (password.length() < 8) {
+                return "Password must be at least 8 characters long.";
+            }
+            if (!password.matches(".*\\d.*")) {
+                return "Password must contain at least one number.";
+            }
+        }
+
+        for (User u : FileHandler.userList) {
+            
+            //skip the user currently being edited
+            if (currentUserId != null && u.ID.equals(currentUserId)) {
+                continue; 
+            }
+
+            String existingEmail = "";
+            String existingContact = "";
+
+            if (u instanceof Counselor c) {
+                existingEmail = c.email;        
+                existingContact = c.contactNumber; 
+            } 
+            else if (u instanceof Receptionist r) {
+                existingEmail = r.email;
+                existingContact = r.contactNumber;
+            }
+
+            if (!existingEmail.isEmpty() && existingEmail.equalsIgnoreCase(email.trim())) {
+                return "A user with this email address already exists.";
+            }
+            if (!existingContact.isEmpty() && existingContact.equals(contact.trim())) {
+                return "A user with this contact number already exists.";
+            }
+        }
+
+        return null; 
+    }
+
+    public String validateData(String counselorId, String dateStr, String startStr, String endStr, String currentRosterId) {        
+        if (counselorId.trim().isEmpty() || dateStr.trim().isEmpty() || startStr.trim().isEmpty() || endStr.trim().isEmpty()) {
+            return "Counselor ID, Date, Start Time and End Time are required.";
+        }
+       
+        boolean counselorExists = false;
+        for (User u : FileHandler.userList) {
+            if (u instanceof Counselor && u.ID.equals(counselorId.trim())) {
+                counselorExists = true;
+                break; 
+            }
+        }
+        if (!counselorExists) {
+            return "The provided Counselor ID does not exist in the system.";
+        }
+
+        LocalDate rosterDate;
+        LocalTime startTime, endTime;
+
+        try {
+            rosterDate = LocalDate.parse(dateStr.trim());
+        } catch (DateTimeParseException e) {
+            return "Date must be in yyyy-MM-dd format.";
+        }
+
+        try {
+            startTime = LocalTime.parse(startStr.trim());
+            endTime = LocalTime.parse(endStr.trim());
+        } catch (DateTimeParseException e) {
+            return "Times must be in HH:mm 24-hour format (e.g. 14:30).";
+        }
+
+        if (!endTime.isAfter(startTime)) {
+            return "End Time must be after Start Time.";
+        }
+
+        LocalTime shiftStartLimit = LocalTime.of(8, 0);  // 08:00
+        LocalTime shiftEndLimit = LocalTime.of(17, 0); // 17:00
+
+        if (startTime.isBefore(shiftStartLimit) || endTime.isAfter(shiftEndLimit)) {
+            return "Roster times must be within working hours (08:00 to 17:00).";
+        }
+
+        LocalDate today = LocalDate.now();
+        if (rosterDate.isBefore(today)) {
+            return "You cannot schedule a roster for a past date.";
+        }
+        if (rosterDate.isAfter(today.plusMonths(3))) {
+            return "You cannot schedule a roster more than 3 months in advance.";
+        }
+
+        for (Roster r : FileHandler.rosterList) {
+            if (currentRosterId != null && r.rosterID.equals(currentRosterId)) {
+                continue; 
+            }
+            if (r.counselorID.equals(counselorId.trim()) && r.date.equals(dateStr.trim())) {
+                LocalTime existingStart = LocalTime.parse(r.startTime);
+                LocalTime existingEnd = LocalTime.parse(r.endTime);
+
+                if (startTime.isBefore(existingEnd) && endTime.isAfter(existingStart)) {
+                    return "This counselor already has an overlapping shift on this date (" + r.startTime + " - " + r.endTime + ").";
+                }
+            }
+        }
+
+        return null; 
+    }
+    
+   public void updateApptStats(String dateFilter, adminApptStats frame) {
+        int total = 0, completed = 0, cancelled = 0, pending = 0;
+        int morningCount = 0, afternoonCount = 0, onlineCount = 0, walkInCount = 0;
+
+        java.util.ArrayList<String> counselorIds = new java.util.ArrayList<>();
+        java.util.ArrayList<Integer> counts = new java.util.ArrayList<>();
+
+        for (Appointment appt : FileHandler.apptList) {
+            if (dateFilter != null && !dateFilter.trim().isEmpty()) {
+                if (!appt.getDate().startsWith(dateFilter.trim())) continue;
+            }
+
+            total++;
+            String status = appt.getStatus();
+            if (status.equalsIgnoreCase("Completed")) completed++;
+            else if (status.equalsIgnoreCase("Cancelled")) cancelled++;
+            else pending++;
+
+            if (appt.getTime().compareTo("12:00") < 0) morningCount++;
+            else afternoonCount++;
+
+            String type = appt.getBookingType();
+            if (type.equalsIgnoreCase("Online")) onlineCount++;
+            else if (type.toLowerCase().contains("walk")) walkInCount++;
+
+            if (!status.equalsIgnoreCase("Cancelled")) {
+                String cID = appt.getCounselorID();
+                int index = counselorIds.indexOf(cID);
+                if (index == -1) {
+                    counselorIds.add(cID);
+                    counts.add(1);
+                } else {
+                    counts.set(index, counts.get(index) + 1);
+                }
+            }
+        }
+
+        frame.getApptBookedTf().setText(String.valueOf(total));
+        frame.getApptCompletedTf().setText(String.valueOf(completed));
+        frame.getApptCancelledTf().setText(String.valueOf(cancelled));
+        frame.getApptPendingTf().setText(String.valueOf(pending));
+
+        double rate = (completed + cancelled > 0) ? ((double) completed / (completed + cancelled)) * 100 : 0.0;
+        frame.getCompletionRateTf().setText(String.format("%.1f%%", rate));
+
+        frame.getMorningTf().setText(String.valueOf(morningCount));
+        frame.getAfternoonTf().setText(String.valueOf(afternoonCount));
+        frame.getOnlineTf().setText(String.valueOf(onlineCount));
+        frame.getWalkInTf().setText(String.valueOf(walkInCount));
+
+        frame.getModel().setRowCount(0);
+        for (int i = 0; i < counselorIds.size(); i++) {
+            frame.getModel().addRow(new Object[]{counselorIds.get(i), counts.get(i)});
+        }
+    }
+
     public void generateReport(String category, String timeframe, String yearStr, String dateStr, adminGenerateReports frame) {
         String filterMatch = "";
         int targetQuarter = 0;
@@ -403,7 +388,7 @@ public class Admin extends User{
         }
 
 // --- DATA GENERATION ---
-        frame.getModel().setRowCount(0); // Use getModel()
+        frame.getModel().setRowCount(0); 
 
         if (category.equals("Appointments")) {
             int total = 0, completed = 0, pending = 0, cancelled = 0;
@@ -417,13 +402,13 @@ public class Admin extends User{
                     frame.getModel().addRow(new Object[]{appt.getAppointmentID(), appt.getStudentID(), appt.getCounselorID(), appt.getDate(), appt.getTime(), appt.getBookingType(), appt.getQueueNumber(), appt.getStatus()});
                 }
             }
-            // Use the getters for the text fields!
+            
             frame.getTotalTf().setText(String.valueOf(total));
             frame.getCompletedTf().setText(String.valueOf(completed));
             frame.getPendingTf().setText(String.valueOf(pending));
             frame.getCancelledTf().setText(String.valueOf(cancelled));
             
-        } else if (category.equals("Counselor Workload")) {
+            } else if (category.equals("Counselor Workload")) {
             java.util.ArrayList<String> counselorIds = new java.util.ArrayList<>();
             java.util.ArrayList<Integer> counts = new java.util.ArrayList<>();
 
@@ -468,7 +453,7 @@ public class Admin extends User{
         }
     }
 
-    // Helper method for date filtering
+    //helper method for date filtering
     public boolean checkDateMatch(String recordDate, String filterMatch, String timeframe, int targetQuarter) {
         if (timeframe.equals("Quarterly")) {
             if (!recordDate.startsWith(filterMatch)) return false;
@@ -484,7 +469,6 @@ public class Admin extends User{
         }
     }
     
-    // --- Logic for Cancelling Appointments ---
     public String cancelAppointment(Appointment appt) {
         if (appt == null) {
             return "No appointment selected.";
@@ -494,29 +478,26 @@ public class Admin extends User{
             return "This appointment is already cancelled.";
         }
 
-        // 1. Cancel the appointment
         appt.setStatus("Cancelled");
 
-        // 2. Free up the corresponding roster slot
         for (Roster r : FileHandler.rosterList) {
             if (r.getCounselorID().equals(appt.getCounselorID()) &&
                 r.getDate().equals(appt.getDate()) &&
                 r.getStartTime().equals(appt.getTime())) {
                 
                 r.setStatus("Available");
-                break; // Found it, no need to keep looping
+                break; 
             }
         }
 
-        // 3. Save changes
         new FileHandler().saveDataToFiles();
         
-        return null; // Return null to indicate success
+        return null; 
     }
     @Override
     public String toString() {
         return "User: " + this.ID
-         + " " + this.username + " " + this.password + " " + this.fullName + " " + this.status + " " + this.contactNumber + " " + this.email + " " + this.officeRoom ;
+         + " " + this.username + " " + this.password + " " + this.fullName + " " + this.contactNumber + " " + this.email + " " + this.officeRoom ;
     }
 
 }
