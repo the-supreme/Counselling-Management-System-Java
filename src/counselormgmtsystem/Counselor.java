@@ -13,7 +13,6 @@ public class Counselor extends User {
     String specialization;
     String contactNumber;
     String email;
-    String feedback;
 
 
     public Counselor(String ID, String username, String password, String fullName,
@@ -22,17 +21,6 @@ public class Counselor extends User {
         this.specialization = specialization;
         this.contactNumber = contactNumber;
         this.email = email;
-        this.feedback = "No feedback yet";
-    }
-
-
-    public Counselor(String ID, String username, String password, String fullName,
-                     String specialization, String contactNumber, String email, String feedback) {
-        super(ID, username, password, fullName);
-        this.specialization = specialization;
-        this.contactNumber = contactNumber;
-        this.email = email;
-        this.feedback = feedback;
     }
 
 
@@ -41,7 +29,6 @@ public class Counselor extends User {
         this.specialization = "General Counseling";
         this.contactNumber = "Not Set";
         this.email = "Not Set";
-        this.feedback = "No feedback yet";
     }
 
   
@@ -62,7 +49,6 @@ public class Counselor extends User {
         System.out.println("Specialization: " + specialization);
         System.out.println("Contact Number: " + contactNumber);
         System.out.println("Email: " + email);
-        System.out.println("Feedback: " + feedback);
     }
 
 
@@ -80,7 +66,7 @@ public class Counselor extends User {
 
 
     public String toFileLine() {
-        return ID + "|" + specialization + "|" + contactNumber + "|" + email + "|" + feedback;
+        return ID + "|" + specialization + "|" + contactNumber + "|" + email;
     }
 
     public String getSpecialization() {
@@ -105,13 +91,5 @@ public class Counselor extends User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
     }
 }
