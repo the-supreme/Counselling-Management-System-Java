@@ -13,12 +13,14 @@ public class FileHandler {
     public static ArrayList<Appointment> apptList = new ArrayList<>();
     public static ArrayList<Roster> rosterList = new ArrayList<>();
     public static ArrayList<ConsultationRecords> consultList = new ArrayList<>();
+    public static ArrayList<Feedback> feedbackList = new ArrayList<>();
 
     public void loadDataFromFiles() {
         userList.clear();
         apptList.clear();
         rosterList.clear();
         consultList.clear();
+        feedbackList.clear();
 
         // Read Users File
         try (BufferedReader uReader = new BufferedReader(new FileReader("dataFiles/users.txt"))) {
@@ -157,6 +159,22 @@ public class FileHandler {
         } catch (IOException e) {
             System.out.println("Cant open the ConsultationRecords File");
         }
+        //  Read Feedback File
+        try (BufferedReader feedbackReader = new BufferedReader(new FileReader("dataFiles/feedback.txt"))) {
+            String feedbackLine;
+            while ((feedbackLine = feedbackReader.readLine()) != null) {
+                feedbackLine = feedbackLine.trim();
+                if (feedbackLine.isEmpty()) continue;
+
+                String[] feedbackData = feedbackLine.split("\\|");
+                if (feedbackData.length >= 3) {
+                    Feedback feedback = new Feedback(feedbackData[0], feedbackData[1], feedbackData[2]);
+                    feedbackList.add(feedback);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Cant open the Feedback File");
+        }
     }
 
     public void saveDataToFiles() {
@@ -277,6 +295,19 @@ public class FileHandler {
             }
         } catch (IOException e) {
             System.out.println("Cannot open the ConsultationRecords file");
+        }
+        // Write Feedback
+        ArrayList<String> listOfFeedback = new ArrayList<>();
+        for (Feedback feedback : feedbackList) {
+            listOfFeedback.add(feedback.toFileLine());
+        }
+        try (BufferedWriter feedbackWriter = new BufferedWriter(new FileWriter("dataFiles/feedback.txt"))) {
+            for (String feedback : listOfFeedback) {
+                feedbackWriter.write(feedback);
+                feedbackWriter.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Cannot open the Feedback file");
         }
     }
 
