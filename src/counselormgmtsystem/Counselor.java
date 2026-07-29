@@ -8,33 +8,43 @@ package counselormgmtsystem;
  *
  * @author tzhen
  */
-// Counselor is a child class of User.
-// Username, password, full name and status are inherited from User.
+
 public class Counselor extends User {
     String specialization;
     String contactNumber;
     String email;
+    String feedback;
 
-    // Constructor used by FileHandler.
-    // Data comes from users.txt and counselor.txt.
+
     public Counselor(String ID, String username, String password, String fullName, String status,
                      String specialization, String contactNumber, String email) {
         super(ID, username, password, fullName, status);
         this.specialization = specialization;
         this.contactNumber = contactNumber;
         this.email = email;
+        this.feedback = "No feedback yet";
     }
 
-    // Constructor overloading.
-    // This is useful if counselor extra details are not available yet.
+
+    public Counselor(String ID, String username, String password, String fullName, String status,
+                     String specialization, String contactNumber, String email, String feedback) {
+        super(ID, username, password, fullName, status);
+        this.specialization = specialization;
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.feedback = feedback;
+    }
+
+
     public Counselor(String ID, String username, String password, String fullName, String status) {
         super(ID, username, password, fullName, status);
         this.specialization = "General Counseling";
         this.contactNumber = "Not Set";
         this.email = "Not Set";
+        this.feedback = "No feedback yet";
     }
 
-    // Method overriding from User class.
+  
     @Override
     public void displayMenu() {
         System.out.println("===== Counselor Menu =====");
@@ -53,9 +63,10 @@ public class Counselor extends User {
         System.out.println("Specialization: " + specialization);
         System.out.println("Contact Number: " + contactNumber);
         System.out.println("Email: " + email);
+        System.out.println("Feedback: " + feedback);
     }
 
-    // This method uses an array, which matches the assignment requirement.
+
     public void viewAssignedAppointments(String[] appointments) {
         System.out.println("===== Assigned Appointments =====");
 
@@ -68,10 +79,9 @@ public class Counselor extends User {
         }
     }
 
-    // This follows counselor.txt format:
-    // counselorID|specialization|contactNumber|email
+
     public String toFileLine() {
-        return ID + "|" + specialization + "|" + contactNumber + "|" + email;
+        return ID + "|" + specialization + "|" + contactNumber + "|" + email + "|" + feedback;
     }
 
     public String getSpecialization() {
@@ -96,5 +106,13 @@ public class Counselor extends User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 }
