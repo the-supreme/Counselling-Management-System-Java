@@ -183,25 +183,30 @@ public class Admin extends User{
         return null; // Null means valid!
     }
 
-    public String validateRoster(String counselorId, String dateStr, String startStr, String endStr, String currentRosterId) { 
+    public String validateRoster(String counselorId, String dateStr, String startStr, String endStr, String currentRosterId) {
+        // 1. Empty Checks
         if (counselorId.trim().isEmpty() || dateStr.trim().isEmpty() || startStr.trim().isEmpty() || endStr.trim().isEmpty()) {
             return "Counselor ID, Date, Start Time and End Time are required.";
         }
-       
+
+        // --- NEW: 2. Counselor Existence Check ---
         boolean counselorExists = false;
         for (User u : FileHandler.userList) {
+            // Assuming your ID variable is public (u.ID). If it's private, use u.getID()
             if (u instanceof Counselor && u.ID.equals(counselorId.trim())) {
                 counselorExists = true;
-                break; 
+                break; // We found them, no need to keep looping!
             }
         }
         if (!counselorExists) {
             return "The provided Counselor ID does not exist in the system.";
         }
+        // -----------------------------------------
 
         LocalDate rosterDate;
         LocalTime startTime, endTime;
 
+        // 3. Formatting Checks
         try {
             rosterDate = LocalDate.parse(dateStr.trim());
         } catch (DateTimeParseException e) {
@@ -215,10 +220,12 @@ public class Admin extends User{
             return "Times must be in HH:mm 24-hour format (e.g. 14:30).";
         }
 
+        // 4. Logical Time Check
         if (!endTime.isAfter(startTime)) {
             return "End Time must be after Start Time.";
         }
 
+        // 5. Working Hours Check
         LocalTime shiftStartLimit = LocalTime.of(8, 0);  // 08:00
         LocalTime shiftEndLimit = LocalTime.of(17, 0); // 17:00
 
@@ -226,6 +233,7 @@ public class Admin extends User{
             return "Roster times must be within working hours (08:00 to 17:00).";
         }
 
+        // 6. Reasonable Date Limits
         LocalDate today = LocalDate.now();
         if (rosterDate.isBefore(today)) {
             return "You cannot schedule a roster for a past date.";
@@ -234,6 +242,7 @@ public class Admin extends User{
             return "You cannot schedule a roster more than 3 months in advance.";
         }
 
+        // 7. Overlap/Duplicate Check
         for (Roster r : FileHandler.rosterList) {
             if (currentRosterId != null && r.rosterID.equals(currentRosterId)) {
                 continue; 
@@ -251,10 +260,12 @@ public class Admin extends User{
         return null; 
     }
     
+    //calculate appointment stats 
    public void updateApptStats(String dateFilter, adminApptStats frame) {
         int total = 0, completed = 0, cancelled = 0, pending = 0;
         int morningCount = 0, afternoonCount = 0, onlineCount = 0, walkInCount = 0;
 
+        // Parallel lists for counselor stats
         java.util.ArrayList<String> counselorIds = new java.util.ArrayList<>();
         java.util.ArrayList<Integer> counts = new java.util.ArrayList<>();
 
@@ -288,6 +299,7 @@ public class Admin extends User{
             }
         }
 
+        // Directly update the GUI fields using the frame reference
         frame.getApptBookedTf().setText(String.valueOf(total));
         frame.getApptCompletedTf().setText(String.valueOf(completed));
         frame.getApptCancelledTf().setText(String.valueOf(cancelled));
@@ -301,12 +313,14 @@ public class Admin extends User{
         frame.getOnlineTf().setText(String.valueOf(onlineCount));
         frame.getWalkInTf().setText(String.valueOf(walkInCount));
 
+        // Update table
         frame.getModel().setRowCount(0);
         for (int i = 0; i < counselorIds.size(); i++) {
             frame.getModel().addRow(new Object[]{counselorIds.get(i), counts.get(i)});
         }
     }
 
+   // --- Logic for Adding Roster ---
     public void manageRosters(ArrayList<Roster> rosterList, Roster targetRoster, String action) {
         if (rosterList == null || targetRoster == null || action == null) {
             System.out.println("Error: invalid arguments supplied to manageRosters().");
@@ -315,6 +329,7 @@ public class Admin extends User{
 
         switch (action.trim().toUpperCase()) {
             case "ADD":
+                // Logic to generate ID and add
                 int max = 0;
                 for (Roster r : rosterList) {
                     try {
@@ -353,9 +368,11 @@ public class Admin extends User{
                 System.out.println("Error: unsupported action \"" + action + "\". Use ADD, UPDATE, or DELETE.");
         }
         
+        // Save to file after any change
         new FileHandler().saveDataToFiles();
     }
     
+// --- Logic for Report Generation ---
     public void generateReport(String category, String timeframe, String yearStr, String dateStr, adminGenerateReports frame) {
         String filterMatch = "";
         int targetQuarter = 0;
@@ -386,7 +403,7 @@ public class Admin extends User{
         }
 
 // --- DATA GENERATION ---
-        frame.getModel().setRowCount(0); 
+        frame.getModel().setRowCount(0); // Use getModel()
 
         if (category.equals("Appointments")) {
             int total = 0, completed = 0, pending = 0, cancelled = 0;
@@ -400,7 +417,7 @@ public class Admin extends User{
                     frame.getModel().addRow(new Object[]{appt.getAppointmentID(), appt.getStudentID(), appt.getCounselorID(), appt.getDate(), appt.getTime(), appt.getBookingType(), appt.getQueueNumber(), appt.getStatus()});
                 }
             }
-            
+            // Use the getters for the text fields!
             frame.getTotalTf().setText(String.valueOf(total));
             frame.getCompletedTf().setText(String.valueOf(completed));
             frame.getPendingTf().setText(String.valueOf(pending));
@@ -451,7 +468,7 @@ public class Admin extends User{
         }
     }
 
-    //helper method for date filtering
+    // Helper method for date filtering
     public boolean checkDateMatch(String recordDate, String filterMatch, String timeframe, int targetQuarter) {
         if (timeframe.equals("Quarterly")) {
             if (!recordDate.startsWith(filterMatch)) return false;
@@ -467,6 +484,7 @@ public class Admin extends User{
         }
     }
     
+    // --- Logic for Cancelling Appointments ---
     public String cancelAppointment(Appointment appt) {
         if (appt == null) {
             return "No appointment selected.";
@@ -476,8 +494,10 @@ public class Admin extends User{
             return "This appointment is already cancelled.";
         }
 
+        // 1. Cancel the appointment
         appt.setStatus("Cancelled");
 
+        // 2. Free up the corresponding roster slot
         for (Roster r : FileHandler.rosterList) {
             if (r.getCounselorID().equals(appt.getCounselorID()) &&
                 r.getDate().equals(appt.getDate()) &&
@@ -488,9 +508,10 @@ public class Admin extends User{
             }
         }
 
+        // 3. Save changes
         new FileHandler().saveDataToFiles();
         
-        return null; 
+        return null; // Return null to indicate success
     }
     @Override
     public String toString() {
