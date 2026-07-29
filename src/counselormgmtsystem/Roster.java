@@ -72,49 +72,4 @@ public class Roster {
         this.status = status; 
     }
  
-    public static void addRoster(String counselorID, String date, String start, String end) {
-        int max = 0;
-        for (Roster r : FileHandler.rosterList) {
-            try {
-                int num = Integer.parseInt(r.rosterID.substring(3));
-                if (num > max) max = num;
-            } catch (NumberFormatException ignored) {}
-        }
-        String newID = String.format("ROS%03d", max + 1);
- 
-        Roster newRoster = new Roster(newID, counselorID, date, start, end, "Available");
-        FileHandler.rosterList.add(newRoster);
- 
-        new FileHandler().saveDataToFiles();
-        System.out.println("--- Roster slot successfully added ---");
-    }
- 
-    public static void updateRoster(String rosterID, String date, String start, String end, String status) {
-        for (Roster r : FileHandler.rosterList) {
-            if (r.rosterID.equals(rosterID)) {
-                r.date      = date;
-                r.startTime = start;
-                r.endTime   = end;
-                r.status    = status;
- 
-                new FileHandler().saveDataToFiles();
-                return;
-            }
-        }
-        System.out.println("Error: Roster ID " + rosterID + " not found.");
-    }
- 
-    public static void deleteRoster(String rosterID) {
-        for (int i = 0; i < FileHandler.rosterList.size(); i++) {
-            if (FileHandler.rosterList.get(i).rosterID.equals(rosterID)) {
-                FileHandler.rosterList.remove(i);
- 
-                new FileHandler().saveDataToFiles();
-                System.out.println("--- Roster " + rosterID + " successfully deleted ---");
-                return;
-            }
-        }
-        System.out.println("Error: Roster ID " + rosterID + " not found.");
-    }
- 
 }
