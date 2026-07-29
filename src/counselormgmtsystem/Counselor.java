@@ -16,9 +16,9 @@ public class Counselor extends User {
     String feedback;
 
 
-    public Counselor(String ID, String username, String password, String fullName, String status,
+    public Counselor(String ID, String username, String password, String fullName,
                      String specialization, String contactNumber, String email) {
-        super(ID, username, password, fullName, status);
+        super(ID, username, password, fullName);
         this.specialization = specialization;
         this.contactNumber = contactNumber;
         this.email = email;
@@ -26,9 +26,9 @@ public class Counselor extends User {
     }
 
 
-    public Counselor(String ID, String username, String password, String fullName, String status,
+    public Counselor(String ID, String username, String password, String fullName,
                      String specialization, String contactNumber, String email, String feedback) {
-        super(ID, username, password, fullName, status);
+        super(ID, username, password, fullName);
         this.specialization = specialization;
         this.contactNumber = contactNumber;
         this.email = email;
@@ -36,8 +36,8 @@ public class Counselor extends User {
     }
 
 
-    public Counselor(String ID, String username, String password, String fullName, String status) {
-        super(ID, username, password, fullName, status);
+    public Counselor(String ID, String username, String password, String fullName) {
+        super(ID, username, password, fullName);
         this.specialization = "General Counseling";
         this.contactNumber = "Not Set";
         this.email = "Not Set";
@@ -59,7 +59,6 @@ public class Counselor extends User {
         System.out.println("Counselor ID: " + ID);
         System.out.println("Name: " + fullName);
         System.out.println("Username: " + username);
-        System.out.println("Status: " + status);
         System.out.println("Specialization: " + specialization);
         System.out.println("Contact Number: " + contactNumber);
         System.out.println("Email: " + email);
